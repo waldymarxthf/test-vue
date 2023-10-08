@@ -3,14 +3,12 @@ import { ref } from 'vue'
 import type { FormState } from '@/types'
 import Draggable from 'vuedraggable'
 import { FilterOutlined, FilterFilled } from '@ant-design/icons-vue'
-
 import type { Product } from './types'
-const open = ref<boolean>(false)
 
+const open = ref<boolean>(false)
 const productData = ref<Product[]>([])
 const inProgressData = ref<Product[]>([])
 const doneData = ref<Product[]>([])
-
 const isFiltered = ref<boolean>(false)
 
 const toggleFilter = () => {
@@ -77,8 +75,8 @@ getProducts()
   <a-layout :style="{ background: '#fff' }">
     <a-layout-header :style="{ background: '#fff' }">
       <a-button size="small" type="primary" style="margin-left: 30px" @click="showModal"
-        >Создать карточку</a-button
-      >
+        >Создать карточку
+      </a-button>
     </a-layout-header>
     <a-layout-content :style="{ padding: '0 50px' }">
       <div :style="{ padding: '24px', minHeight: '280px' }">
