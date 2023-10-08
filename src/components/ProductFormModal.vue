@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { FormState } from '@/types'
 import { Form, Upload, message } from 'ant-design-vue'
+import type { FormState } from '@/types'
 import { UploadOutlined } from '@ant-design/icons-vue'
 import { reactive } from 'vue'
 
@@ -93,8 +93,8 @@ const beforeUpload = (file: File) => {
     @cancel="close"
   >
     <a-form
-      :model="formState"
       name="basic"
+      :model="formState"
       :wrapper-col="{ span: 16 }"
       :label-col="{ style: { width: '100px' } }"
       autocomplete="off"
@@ -113,7 +113,7 @@ const beforeUpload = (file: File) => {
       </a-form-item>
 
       <a-form-item label="Оценка" name="rating" v-bind="validateInfos.rating">
-        <a-input-number v-model:value="formState.rating.rate" />
+        <a-input-number v-model:value="formState.rating.rate" :min="0" :max="5" />
       </a-form-item>
 
       <a-form-item label="Цена" name="price" v-bind="validateInfos.price">
@@ -128,7 +128,9 @@ const beforeUpload = (file: File) => {
           :before-upload="beforeUpload"
         >
           <a-button>
-            <template #icon><UploadOutlined /></template>
+            <template #icon>
+              <upload-outlined />
+            </template>
             Click to upload
           </a-button>
         </a-upload>

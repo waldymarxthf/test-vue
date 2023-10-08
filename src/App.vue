@@ -1,71 +1,73 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { FormState } from '@/types'
+import { FilterFilled, FilterOutlined } from '@ant-design/icons-vue'
+import type { FormState, Product } from '@/types'
+import { type Ref, ref } from 'vue'
 import Draggable from 'vuedraggable'
-import { FilterOutlined, FilterFilled } from '@ant-design/icons-vue'
-import type { Product } from './types'
 
-const open = ref<boolean>(false)
-const productData = ref<Product[]>([])
-const inProgressData = ref<Product[]>([])
-const doneData = ref<Product[]>([])
 const isFiltered = ref<boolean>(false)
+const open = ref<boolean>(false)
+
+const unprocessedColumn = ref<Product[]>([])
+const inProgressColumn = ref<Product[]>([])
+const doneColumn = ref<Product[]>([])
 
 const toggleFilter = () => {
   isFiltered.value = !isFiltered.value
   if (isFiltered.value) {
-    doneData.value.sort((a, b) => b.rating.rate - a.rating.rate)
+    doneColumn.value.sort((a, b) => b.rating.rate - a.rating.rate)
   } else {
-    doneData.value.sort((a, b) => a.id - b.id)
+    doneColumn.value.sort((a, b) => a.id - b.id)
   }
 }
 
 const addProduct = (product: FormState) => {
   const newProduct: Product = {
-    id: productData.value.length + 1,
+    id: unprocessedColumn.value.length + 1,
     title: product.title,
     description: product.description,
     category: product.category,
     rating: product.rating,
     price: product.price
   }
-  productData.value.push(newProduct)
-  open.value = false
+  unprocessedColumn.value.push(newProduct)
+  closeModal()
 }
 
 const removeProduct = (product: Product) => {
-  const indexInProductData = productData.value.findIndex((p) => p.id === product.id)
-  const indexInProgressData = inProgressData.value.findIndex((p) => p.id === product.id)
-  const indexInDoneData = doneData.value.findIndex((p) => p.id === product.id)
-
-  if (indexInProductData !== -1) {
-    productData.value.splice(indexInProductData, 1)
-  } else if (indexInProgressData !== -1) {
-    inProgressData.value.splice(indexInProgressData, 1)
-  } else if (indexInDoneData !== -1) {
-    doneData.value.splice(indexInDoneData, 1)
+  const removeFromColumn = (column: Ref<Product[]>) => {
+    const index = column.value.findIndex((p) => p.id === product.id)
+    if (index !== -1) {
+      column.value.splice(index, 1)
+    }
   }
+  removeFromColumn(unprocessedColumn)
+  removeFromColumn(inProgressColumn)
+  removeFromColumn(doneColumn)
 }
 
 const moveToInProgress = (productId: number) => {
-  const productIndex = productData.value.findIndex((product) => product.id === productId)
+  const productIndex = unprocessedColumn.value.findIndex((product) => product.id === productId)
   if (productIndex !== -1) {
-    inProgressData.value.push(productData.value[productIndex])
-    productData.value.splice(productIndex, 1)
+    inProgressColumn.value.push(unprocessedColumn.value[productIndex])
+    unprocessedColumn.value.splice(productIndex, 1)
   }
 }
 
 const isInProductData = (product: Product) => {
-  return productData.value.includes(product)
+  return unprocessedColumn.value.includes(product)
 }
 
 const showModal = () => {
   open.value = true
 }
 
-async function getProducts() {
+const closeModal = () => {
+  open.value = false
+}
+
+const getProducts = async () => {
   const response = await fetch('https://fakestoreapi.com/products')
-  productData.value = await response.json()
+  unprocessedColumn.value = await response.json()
 }
 
 getProducts()
@@ -74,20 +76,21 @@ getProducts()
 <template>
   <a-layout :style="{ background: '#fff' }">
     <a-layout-header :style="{ background: '#fff' }">
-      <a-button size="small" type="primary" style="margin-left: 30px" @click="showModal"
-        >Создать карточку
+      <a-button size="small" type="primary" style="margin-left: 30px" @click="showModal">
+        Создать карточку
       </a-button>
     </a-layout-header>
     <a-layout-content :style="{ padding: '0 50px' }">
       <div :style="{ padding: '24px', minHeight: '280px' }">
-        <a-row :gutter="16">
-          <a-col class="gutter-row" :span="6">
+        <div class="container">
+          <a-col class="gutter-row" :span="1">
             <div class="unprocessed-container">
               <div class="gutter-box unprocessed">
-                Необработанные {{ productData.length !== 0 ? productData.length : null }}
+                Необработанные
+                {{ unprocessedColumn.length !== 0 ? unprocessedColumn.length : null }}
               </div>
-              <Draggable
-                v-model="productData"
+              <draggable
+                v-model="unprocessedColumn"
                 class="product-list"
                 group="products"
                 tag="div"
@@ -105,17 +108,17 @@ getProducts()
                     @remove="removeProduct"
                   />
                 </template>
-              </Draggable>
+              </draggable>
             </div>
           </a-col>
 
-          <a-col class="gutter-row" :span="6">
+          <a-col class="gutter-row" :span="1">
             <div class="in-progress-container">
               <div class="gutter-box in-progress">
-                В работе {{ inProgressData.length !== 0 ? inProgressData.length : null }}
+                В работе {{ inProgressColumn.length !== 0 ? inProgressColumn.length : null }}
               </div>
-              <Draggable
-                v-model="inProgressData"
+              <draggable
+                v-model="inProgressColumn"
                 class="product-list"
                 group="products"
                 tag="div"
@@ -132,19 +135,19 @@ getProducts()
                     @remove="removeProduct"
                   />
                 </template>
-              </Draggable>
+              </draggable>
             </div>
           </a-col>
 
-          <a-col class="gutter-row" :span="6">
+          <a-col class="gutter-row" :span="1">
             <div class="done-container">
               <div class="gutter-box done">
-                Завершенные {{ doneData.length !== 0 ? doneData.length : null }}
+                Завершенные {{ doneColumn.length !== 0 ? doneColumn.length : null }}
                 <filter-outlined v-if="!isFiltered" @click="toggleFilter" />
                 <filter-filled v-else @click="toggleFilter" />
               </div>
-              <Draggable
-                v-model="doneData"
+              <draggable
+                v-model="doneColumn"
                 class="product-list"
                 group="products"
                 tag="div"
@@ -161,17 +164,20 @@ getProducts()
                     @remove="removeProduct"
                   />
                 </template>
-              </Draggable>
+              </draggable>
             </div>
           </a-col>
-        </a-row>
-        <ProductFormModal :open="open" @update:open="open = $event" @add-product="addProduct" />
+        </div>
+        <ProductFormModal v-model:open="open" @add-product="addProduct" />
       </div>
     </a-layout-content>
   </a-layout>
 </template>
 
 <style scoped lang="scss">
+.container {
+  display: flex;
+}
 .drag {
   transform: rotate(5deg);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -183,39 +189,7 @@ getProducts()
 }
 .gutter-row {
   margin: 0 10px;
-  max-width: 360px;
-}
-
-.product-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.unprocessed-container {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  background-color: #55a1ff;
-  border-radius: 10px;
-  padding-bottom: 10px;
-}
-
-.in-progress-container {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  background-color: #ffea6f;
-  border-radius: 10px;
-  padding-bottom: 10px;
-}
-
-.done-container {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  background-color: #ff6d6d;
-  border-radius: 10px;
-  padding-bottom: 10px;
+  min-width: 340px;
 }
 
 .gutter-box {
@@ -225,6 +199,42 @@ getProducts()
   color: white;
   font-size: 16px;
   font-weight: 600;
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 340px;
+}
+.unprocessed-container {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  background-color: #55a1ff;
+  border-radius: 10px;
+  padding-bottom: 10px;
+}
+
+.in-progress-container {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  background-color: #ffea6f;
+  border-radius: 10px;
+  padding-bottom: 10px;
+}
+
+.done-container {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  background-color: #ff6d6d;
+  border-radius: 10px;
+  padding-bottom: 10px;
 }
 
 .unprocessed {

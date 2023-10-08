@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue'
+import { computed, ref, watch } from 'vue'
 import { Empty } from 'ant-design-vue'
 import type { Product } from '@/types'
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE
@@ -23,6 +23,10 @@ watch(ratingString, (newVal) => {
 
 watch(priceString, (newVal) => {
   product.value.price = Number(newVal)
+})
+
+const editableOptions = computed(() => {
+  return isEditing.value && { triggerType: 'icon' }
 })
 
 const toggleEditing = () => {
@@ -48,36 +52,27 @@ const remove = () => {
       <a-typography-title
         v-model:content="product.title"
         :level="5"
-        :ellipsis="isEditing ? false : true"
-        :editable="isEditing ? { triggerType: 'icon' } : false"
+        :ellipsis="!isEditing"
+        :editable="editableOptions"
       />
       <a-typography-text
         v-model:content="product.description"
-        :ellipsis="isEditing ? false : true"
-        :editable="isEditing ? { triggerType: 'icon' } : false"
+        :ellipsis="!isEditing"
+        :editable="editableOptions"
       />
       <a-typography-text strong>
         Категория:
-        <a-typography-text
-          v-model:content="product.category"
-          :editable="isEditing ? { triggerType: 'icon' } : false"
-        ></a-typography-text>
+        <a-typography-text v-model:content="product.category" :editable="editableOptions" />
       </a-typography-text>
       <div>
         <a-typography-text strong>
           Оценка:
-          <a-typography-text
-            v-model:content="ratingString"
-            :editable="isEditing ? { triggerType: 'icon' } : false"
-          ></a-typography-text>
+          <a-typography-text v-model:content="ratingString" :editable="editableOptions" />
         </a-typography-text>
       </div>
       <a-typography-text strong>
         Цена:
-        <a-typography-text
-          v-model:content="priceString"
-          :editable="isEditing ? { triggerType: 'icon' } : false"
-        />
+        <a-typography-text v-model:content="priceString" :editable="editableOptions" />
       </a-typography-text>
     </div>
     <template #actions>

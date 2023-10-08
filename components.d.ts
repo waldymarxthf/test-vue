@@ -31,6 +31,7 @@ declare module 'vue' {
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     AUpload: typeof import('ant-design-vue/es')['Upload']
     ProductCard: typeof import('./src/components/ProductCard.vue')['default']
+    ProductColumn: typeof import('./src/components/ProductColumn.vue')['default']
     ProductFormModal: typeof import('./src/components/ProductFormModal.vue')['default']
   }
 }
