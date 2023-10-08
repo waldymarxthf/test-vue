@@ -2,6 +2,8 @@
 
 Этот проект представляет собой канбан-систему для управления продуктами. Проект разработан с использованием следующих технологий и инструментов:
 
+[Демо проекта](https://test-vue-waldymarxthf.vercel.app/)
+
 - [Vue 3](https://v3.vuejs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vite](https://vitejs.dev/)
@@ -11,6 +13,9 @@
 - [Prettier](https://prettier.io/)
 - [Sass](https://sass-lang.com/)
 - [pnpm](https://pnpm.io/)
+
+![image](https://github.com/waldymarxthf/test-vue/assets/56730796/938c3b07-f7a9-4e05-9336-61ce6642c3bc)
+
 
 ## Особенности проекта
 
