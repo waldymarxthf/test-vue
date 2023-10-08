@@ -1,46 +1,41 @@
-# vite-project
+# Канбан-система управления продуктами на Vue 3
 
-This template should help get you started developing with Vue 3 in Vite.
+Этот проект представляет собой канбан-систему для управления продуктами. Проект разработан с использованием следующих технологий и инструментов:
 
-## Recommended IDE Setup
+- [Vue 3](https://v3.vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [Ant Design Vue](https://2x.antdv.com/docs/vue/introduce/)
+- [VueDraggable](https://github.com/SortableJS/Vue.Draggable)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+- [Sass](https://sass-lang.com/)
+- [pnpm](https://pnpm.io/)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Особенности проекта
 
-## Type Support for `.vue` Imports in TS
+1. **Загрузка данных продуктов**: Данные продуктов загружаются из [Fake Store API](https://fakestoreapi.com) при помощи fetch.
+2. **Отображение данных продукта**: Все данные продукта, включая изображения, отображаются на карточке продукта.
+3. **Управление карточками продукта**: Пользователи могут создавать новые карточки продукта, удалять и редактировать существующие карточки.
+4. **Перемещение карточек**: Карточки можно перетаскивать из колонки в колонку, как с помощью drag & drop, так и с помощью клика.
+5. **Сортировка карточек**: В колонке карточки можно сортировать по рейтингу.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Установка и запуск проекта
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-pnpm dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
+1. Убедитесь, что у вас установлен Node.js и pnpm.
+2. Клонируйте репозиторий на свой компьютер:
+   ```bash
+   git clone https://github.com/waldymarxthf/test-vue.git
+   ```
+3. Перейдите в каталог проекта:
+   ```bash
+   cd test-vue
+   ```
+4. Установите зависимости:
+   ```bash
+   pnpm install
+   ```
+5. Запустите проект:
+   ```bash
+   pnpm dev
+   ```
